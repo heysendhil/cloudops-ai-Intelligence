@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+crewai[google-genai]
+pytest
+python-dotenv
+httpx
