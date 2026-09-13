@@ -10,7 +10,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 GOOGLE_API_KEY_ENV_VAR = "GOOGLE_API_KEY"
-DEFAULT_GEMINI_MODEL = "gemini/gemini-2.0-flash-001"
+DEFAULT_GEMINI_MODEL = "gemini/gemini-3.6-flash"
 
 _ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=_ENV_FILE)

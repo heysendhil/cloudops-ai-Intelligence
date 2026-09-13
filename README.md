@@ -3,9 +3,12 @@
 An enterprise-oriented, multi-agent system for investigating Cloud and Kubernetes
 incidents, built on CrewAI's Agent → Task → Crew → Flow architecture.
 
-> **Status: Architecture & rules phase.** No agents or application code have been
-> implemented yet. This repository currently contains only project rules and design
-> documentation. See [CLAUDE.md](CLAUDE.md) for the constraints governing implementation.
+> **Status: Implemented (V1).** All 7 agents, their tasks, the CloudOps Investigation
+> Crew, the end-to-end Flow, the FastAPI backend, the Next.js dashboard, and the RAG
+> knowledge layer are built and tested against the simulated incident INC-2026-0912. See
+> [CLAUDE.md](CLAUDE.md) for the constraints governing implementation and
+> [docs/evaluation-report.md](docs/evaluation-report.md) for the current full test-suite
+> results.
 
 ## What it does (V1 scope)
 
@@ -51,8 +54,8 @@ Full design: [docs/architecture.md](docs/architecture.md) · [docs/agent-design.
 | Backend API | FastAPI (Python 3.11) |
 | Frontend | Next.js + TypeScript |
 | Knowledge store | ChromaDB |
-| LLM provider | OpenAI API |
-| Testing | pytest |
+| LLM provider | Google Gemini API (`GOOGLE_API_KEY`) |
+| Testing | pytest (backend), Vitest (frontend) |
 | Source control | Git |
 
 ## Documentation
@@ -61,6 +64,7 @@ Full design: [docs/architecture.md](docs/architecture.md) · [docs/agent-design.
 - [docs/architecture.md](docs/architecture.md) — system architecture and data flow
 - [docs/agent-design.md](docs/agent-design.md) — per-agent and per-task specification
 - [docs/evaluation.md](docs/evaluation.md) — how agent/system output quality is evaluated
+- [docs/evaluation-report.md](docs/evaluation-report.md) — generated PASS/FAIL results from the latest full test-suite run
 - [docs/security.md](docs/security.md) — security, credentials, and safety rules
 
 ## Project rules
@@ -70,6 +74,49 @@ repository, including the V1 read-only / simulated-data / no-remediation guarant
 
 ## Getting started
 
-Implementation has not started. Once it does, setup instructions (Python virtualenv,
-`pip install`, `npm install`, running FastAPI and Next.js locally, seeding ChromaDB with
-simulated runbooks) will be documented here.
+### Backend
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+cp backend/.env.example backend/.env   # then set GOOGLE_API_KEY in it
+cd backend
+uvicorn app.main:app --reload --port 8000
+```
+Health check: `GET http://localhost:8000/health`. Interactive API docs: `http://localhost:8000/docs`.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Talks to the backend at `http://localhost:8000` by default (override with the `BACKEND_API_URL` env var). No `.env` file is required.
+
+### The one simulated incident
+
+The only incident record in this repo is `INC-2026-0912` (`data/incidents/`, `data/logs/`,
+`data/metrics/`, `data/kubernetes/`, `data/runbooks/`). Trigger an investigation with:
+```bash
+curl -X POST http://localhost:8000/incidents/INC-2026-0912/investigate
+```
+or from the dashboard, which loads it automatically.
+
+### Tests
+
+```bash
+# Structural + adversarial suite (fast, no API key needed, ~11s):
+CREWAI_TRACING_ENABLED=false pytest -q
+
+# Also run the live-LLM evaluations against a real Gemini model (needs
+# GOOGLE_API_KEY; consumes real, often quota-limited, API usage):
+CREWAI_TRACING_ENABLED=false pytest --run-live -q
+
+# Frontend:
+cd frontend && npm test
+```
+Live-LLM evaluations (`tests/evaluation/`) are marked `live_llm` and skipped by default —
+see [docs/evaluation.md](docs/evaluation.md) and
+[docs/evaluation-report.md](docs/evaluation-report.md) for details.
