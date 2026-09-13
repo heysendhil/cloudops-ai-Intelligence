@@ -1,6 +1,7 @@
 fastapi
 uvicorn[standard]
 crewai[google-genai]
+chromadb
 pytest
 python-dotenv
 httpx

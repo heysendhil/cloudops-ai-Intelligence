@@ -1,0 +1,153 @@
+{
+  "cluster": "prod-eks-us-east-1",
+  "namespace": "payments",
+  "snapshot_time": "2026-09-12T14:45:00Z",
+  "deployment": {
+    "name": "payment-api",
+    "namespace": "payments",
+    "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/payment-api:2.3.1",
+    "replicaset": "payment-api-7f9c9d6b78",
+    "desired_replicas": 6,
+    "available_replicas": 6,
+    "updated_replicas": 6,
+    "last_rollout_time": "2026-09-10T09:15:00Z",
+    "resources": {
+      "requests": { "cpu": "500m", "memory": "1Gi" },
+      "limits": { "cpu": "1", "memory": "1.5Gi" }
+    },
+    "env": [
+      { "name": "DB_POOL_MAX_SIZE", "value": "20" },
+      { "name": "DB_POOL_CONNECTION_TIMEOUT_MS", "value": "30000" },
+      { "name": "SPRING_DATASOURCE_URL", "value": "jdbc:postgresql://payments-prod-pg.cluster-xxxxxxxxx.us-east-1.rds.amazonaws.com:5432/payments" }
+    ],
+    "liveness_probe": {
+      "httpGet": { "path": "/actuator/health/liveness", "port": 8080 },
+      "initialDelaySeconds": 30,
+      "periodSeconds": 10,
+      "timeoutSeconds": 5,
+      "failureThreshold": 3
+    },
+    "readiness_probe": {
+      "httpGet": { "path": "/actuator/health/readiness", "port": 8080 },
+      "initialDelaySeconds": 15,
+      "periodSeconds": 10,
+      "timeoutSeconds": 5,
+      "failureThreshold": 3
+    }
+  },
+  "pods": [
+    {
+      "name": "payment-api-7f9c9d6b78-x4k2p",
+      "node": "ip-10-0-12-34.ec2.internal",
+      "replicaset": "payment-api-7f9c9d6b78",
+      "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/payment-api:2.3.1",
+      "phase": "Running",
+      "ready": true,
+      "restart_count": 1,
+      "restarts": [
+        { "time": "2026-09-12T14:10:15Z", "reason": "Liveness probe failed", "exit_code": 137 }
+      ]
+    },
+    {
+      "name": "payment-api-7f9c9d6b78-m9qbz",
+      "node": "ip-10-0-14-56.ec2.internal",
+      "replicaset": "payment-api-7f9c9d6b78",
+      "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/payment-api:2.3.1",
+      "phase": "Running",
+      "ready": true,
+      "restart_count": 1,
+      "restarts": [
+        { "time": "2026-09-12T14:13:40Z", "reason": "Liveness probe failed", "exit_code": 137 }
+      ]
+    },
+    {
+      "name": "payment-api-7f9c9d6b78-t2tuc",
+      "node": "ip-10-0-12-34.ec2.internal",
+      "replicaset": "payment-api-7f9c9d6b78",
+      "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/payment-api:2.3.1",
+      "phase": "Running",
+      "ready": true,
+      "restart_count": 1,
+      "restarts": [
+        { "time": "2026-09-12T14:16:05Z", "reason": "Liveness probe failed", "exit_code": 137 }
+      ]
+    },
+    {
+      "name": "payment-api-7f9c9d6b78-p8sqk",
+      "node": "ip-10-0-16-78.ec2.internal",
+      "replicaset": "payment-api-7f9c9d6b78",
+      "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/payment-api:2.3.1",
+      "phase": "Running",
+      "ready": true,
+      "restart_count": 1,
+      "restarts": [
+        { "time": "2026-09-12T14:19:30Z", "reason": "Liveness probe failed", "exit_code": 137 }
+      ]
+    },
+    {
+      "name": "payment-api-7f9c9d6b78-h5f7r",
+      "node": "ip-10-0-14-56.ec2.internal",
+      "replicaset": "payment-api-7f9c9d6b78",
+      "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/payment-api:2.3.1",
+      "phase": "Running",
+      "ready": true,
+      "restart_count": 0,
+      "restarts": []
+    },
+    {
+      "name": "payment-api-7f9c9d6b78-d3jqw",
+      "node": "ip-10-0-16-78.ec2.internal",
+      "replicaset": "payment-api-7f9c9d6b78",
+      "image": "123456789012.dkr.ecr.us-east-1.amazonaws.com/payment-api:2.3.1",
+      "phase": "Running",
+      "ready": true,
+      "restart_count": 0,
+      "restarts": []
+    }
+  ],
+  "cronjobs": [
+    {
+      "name": "payment-reconciliation-job",
+      "namespace": "payments",
+      "schedule": "0 * * * *",
+      "last_run": {
+        "start_time": "2026-09-12T13:58:02Z",
+        "completion_time": "2026-09-12T14:28:47Z",
+        "status": "Succeeded"
+      }
+    }
+  ],
+  "events": [
+    { "time": "2026-09-12T14:09:45Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-x4k2p", "source": "kubelet", "message": "Liveness probe failed: HTTP probe failed with statuscode: 500" },
+    { "time": "2026-09-12T14:09:55Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-x4k2p", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.1.15:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:10:05Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-x4k2p", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.1.15:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:10:15Z", "type": "Normal", "reason": "Killing", "involved_object": "pod/payment-api-7f9c9d6b78-x4k2p", "source": "kubelet", "message": "Container payment-api failed liveness probe, will be restarted" },
+    { "time": "2026-09-12T14:10:16Z", "type": "Normal", "reason": "Pulled", "involved_object": "pod/payment-api-7f9c9d6b78-x4k2p", "source": "kubelet", "message": "Container image already present on machine" },
+    { "time": "2026-09-12T14:10:17Z", "type": "Normal", "reason": "Created", "involved_object": "pod/payment-api-7f9c9d6b78-x4k2p", "source": "kubelet", "message": "Created container payment-api" },
+    { "time": "2026-09-12T14:10:18Z", "type": "Normal", "reason": "Started", "involved_object": "pod/payment-api-7f9c9d6b78-x4k2p", "source": "kubelet", "message": "Started container payment-api" },
+
+    { "time": "2026-09-12T14:13:10Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-m9qbz", "source": "kubelet", "message": "Liveness probe failed: HTTP probe failed with statuscode: 500" },
+    { "time": "2026-09-12T14:13:20Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-m9qbz", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.2.41:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:13:30Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-m9qbz", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.2.41:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:13:40Z", "type": "Normal", "reason": "Killing", "involved_object": "pod/payment-api-7f9c9d6b78-m9qbz", "source": "kubelet", "message": "Container payment-api failed liveness probe, will be restarted" },
+    { "time": "2026-09-12T14:13:41Z", "type": "Normal", "reason": "Pulled", "involved_object": "pod/payment-api-7f9c9d6b78-m9qbz", "source": "kubelet", "message": "Container image already present on machine" },
+    { "time": "2026-09-12T14:13:42Z", "type": "Normal", "reason": "Created", "involved_object": "pod/payment-api-7f9c9d6b78-m9qbz", "source": "kubelet", "message": "Created container payment-api" },
+    { "time": "2026-09-12T14:13:43Z", "type": "Normal", "reason": "Started", "involved_object": "pod/payment-api-7f9c9d6b78-m9qbz", "source": "kubelet", "message": "Started container payment-api" },
+
+    { "time": "2026-09-12T14:15:35Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-t2tuc", "source": "kubelet", "message": "Liveness probe failed: HTTP probe failed with statuscode: 500" },
+    { "time": "2026-09-12T14:15:45Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-t2tuc", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.1.22:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:15:55Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-t2tuc", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.1.22:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:16:05Z", "type": "Normal", "reason": "Killing", "involved_object": "pod/payment-api-7f9c9d6b78-t2tuc", "source": "kubelet", "message": "Container payment-api failed liveness probe, will be restarted" },
+    { "time": "2026-09-12T14:16:06Z", "type": "Normal", "reason": "Pulled", "involved_object": "pod/payment-api-7f9c9d6b78-t2tuc", "source": "kubelet", "message": "Container image already present on machine" },
+    { "time": "2026-09-12T14:16:07Z", "type": "Normal", "reason": "Created", "involved_object": "pod/payment-api-7f9c9d6b78-t2tuc", "source": "kubelet", "message": "Created container payment-api" },
+    { "time": "2026-09-12T14:16:08Z", "type": "Normal", "reason": "Started", "involved_object": "pod/payment-api-7f9c9d6b78-t2tuc", "source": "kubelet", "message": "Started container payment-api" },
+
+    { "time": "2026-09-12T14:19:00Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-p8sqk", "source": "kubelet", "message": "Liveness probe failed: HTTP probe failed with statuscode: 500" },
+    { "time": "2026-09-12T14:19:10Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-p8sqk", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.3.09:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:19:20Z", "type": "Warning", "reason": "Unhealthy", "involved_object": "pod/payment-api-7f9c9d6b78-p8sqk", "source": "kubelet", "message": "Liveness probe failed: Get \"http://10.0.3.09:8080/actuator/health/liveness\": context deadline exceeded" },
+    { "time": "2026-09-12T14:19:30Z", "type": "Normal", "reason": "Killing", "involved_object": "pod/payment-api-7f9c9d6b78-p8sqk", "source": "kubelet", "message": "Container payment-api failed liveness probe, will be restarted" },
+    { "time": "2026-09-12T14:19:31Z", "type": "Normal", "reason": "Pulled", "involved_object": "pod/payment-api-7f9c9d6b78-p8sqk", "source": "kubelet", "message": "Container image already present on machine" },
+    { "time": "2026-09-12T14:19:32Z", "type": "Normal", "reason": "Created", "involved_object": "pod/payment-api-7f9c9d6b78-p8sqk", "source": "kubelet", "message": "Created container payment-api" },
+    { "time": "2026-09-12T14:19:33Z", "type": "Normal", "reason": "Started", "involved_object": "pod/payment-api-7f9c9d6b78-p8sqk", "source": "kubelet", "message": "Started container payment-api" }
+  ]
+}

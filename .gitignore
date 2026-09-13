@@ -12,5 +12,8 @@ frontend/.next/
 frontend/out/
 frontend/.env*.local
 
+# ChromaDB persistent store
+rag/chroma_db/
+
 # OS
 .DS_Store

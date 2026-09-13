@@ -1,0 +1,87 @@
+{
+  "incident_id": "INC-2026-0912",
+  "title": "Elevated latency and HTTP 500 errors on Payment API due to database connection pool exhaustion",
+  "service": {
+    "name": "Payment API",
+    "slug": "payment-api",
+    "namespace": "payments",
+    "owner_team": "payments-platform"
+  },
+  "environment": "production",
+  "platform": "Kubernetes on AWS",
+  "cluster": "prod-eks-us-east-1",
+  "region": "us-east-1",
+  "severity": "SEV-2",
+  "status": "investigating",
+  "detected_at": "2026-09-12T14:07:30Z",
+  "created_at": "2026-09-12T14:09:00Z",
+  "last_updated_at": "2026-09-12T14:45:00Z",
+  "time_window": {
+    "start": "2026-09-12T13:50:00Z",
+    "end": "2026-09-12T14:45:00Z"
+  },
+  "alert_source": "Prometheus Alertmanager",
+  "triggering_alerts": [
+    {
+      "alert_name": "PaymentApiHighErrorRate",
+      "fired_at": "2026-09-12T14:07:30Z",
+      "description": "HTTP 5xx rate on payment-api exceeded 5% for 3 minutes"
+    },
+    {
+      "alert_name": "PaymentApiDbPoolSaturation",
+      "fired_at": "2026-09-12T14:08:15Z",
+      "description": "payment-api HikariCP connection pool utilization exceeded 90% for 2 minutes"
+    }
+  ],
+  "symptoms": [
+    "API latency approximately 4 seconds (p95 well above baseline) on payment-api endpoints",
+    "Increase in HTTP 500 errors returned by payment-api",
+    "Database connection pool utilization increased toward 100%",
+    "Multiple payment-api pods restarted"
+  ],
+  "impact": {
+    "customer_facing": true,
+    "description": "Checkout and payment confirmation requests experienced elevated latency and intermittent failures; some payment attempts returned HTTP 500 and required client retry."
+  },
+  "affected_components": [
+    {
+      "type": "kubernetes_deployment",
+      "name": "payment-api",
+      "namespace": "payments"
+    },
+    {
+      "type": "database",
+      "name": "payments-prod-pg",
+      "engine": "PostgreSQL",
+      "note": "Primary transactional database for payment-api"
+    }
+  ],
+  "on_call": {
+    "primary": "sre-oncall-payments",
+    "escalated_to": ["dba-oncall"]
+  },
+  "notes": [
+    {
+      "timestamp": "2026-09-12T14:12:00Z",
+      "author": "sre-oncall-payments",
+      "note": "Confirmed HikariCP connection pool at 100% utilization across all payment-api pods. Investigating query latency on the primary database."
+    },
+    {
+      "timestamp": "2026-09-12T14:22:00Z",
+      "author": "dba-oncall",
+      "note": "Observed elevated query duration on the transactions table coinciding with the payment-reconciliation-job run window, alongside database CPU utilization peaking near 92%. Not yet confirmed as root cause."
+    },
+    {
+      "timestamp": "2026-09-12T14:32:00Z",
+      "author": "sre-oncall-payments",
+      "note": "Connection pool utilization and latency trending back toward baseline. Continuing to monitor before closing out."
+    }
+  ],
+  "evidence_sources": {
+    "logs": "data/logs/payment-api.log",
+    "metrics": "data/metrics/payment-api.json",
+    "kubernetes": "data/kubernetes/payment-api.json",
+    "related_runbooks": ["data/runbooks/database-connection-pool.md"]
+  },
+  "resolution": null
+}
