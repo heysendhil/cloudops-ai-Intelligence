@@ -6,6 +6,11 @@ backend/venv/
 .pytest_cache/
 .env
 
+# Secrets and stray tool state (a literal "$HOME" folder created by CrewAI holds a key)
+*.key
+*.pem
+$HOME/
+
 # Node / Next.js
 frontend/node_modules/
 frontend/.next/

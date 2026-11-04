@@ -1,16 +1,16 @@
 # Phase 21 Evaluation Report -- Cloud Ops AI Intelligence
 
-Generated 2026-09-13 12:26 by `scripts/generate_evaluation_report.py` directly from the pytest and vitest JUnit XML output of a full suite run. Every test below is either PASS, FAIL, or SKIP as reported by the test runner -- none are hidden, hand-edited, or simulated.
+Generated 2026-09-14 00:13 by `scripts/generate_evaluation_report.py` directly from the pytest and vitest JUnit XML output of a full suite run. Every test below is either PASS, FAIL, or SKIP as reported by the test runner -- none are hidden, hand-edited, or simulated.
 
 ## Overall summary
 
-- Backend (pytest): 399 total -- 344 passed, 55 failed, 0 skipped
+- Backend (pytest): 400 total -- 331 passed, 69 failed, 0 skipped
 - Frontend (vitest): 12 total -- 12 passed, 0 failed, 0 skipped
-- **Combined: 411 total -- 356 passed, 55 failed, 0 skipped**
+- **Combined: 412 total -- 343 passed, 69 failed, 0 skipped**
 
-**55 FAILING TEST(S) -- see below. Not hidden.**
+**69 FAILING TEST(S) -- see below. Not hidden.**
 
-- 55 fail with the exact same root cause: Google's free-tier daily quota for this API key (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`, 20 requests/day/model) was exhausted partway through this run. This is an external account-tier limit, not a code defect -- the same tests pass when quota is available (see the per-module isolated runs recorded during this evaluation). Every quota-blocked test is still listed individually below with its real status; none are hidden or converted to a fake PASS.
+- 69 fail with the exact same root cause: Google's free-tier daily quota for this API key (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`, 20 requests/day/model) was exhausted partway through this run. This is an external account-tier limit, not a code defect -- the same tests pass when quota is available (see the per-module isolated runs recorded during this evaluation). Every quota-blocked test is still listed individually below with its real status; none are hidden or converted to a fake PASS.
 
 
 ## 1-11. Evaluation by required category
@@ -400,7 +400,7 @@ Per CLAUDE.md's Agent/Task/Crew/Flow layering, a single test module often legiti
 
 ### 6. FastAPI
 
-20 total -- 20 passed, 0 failed, 0 skipped
+21 total -- 21 passed, 0 failed, 0 skipped
 
 | Test | Status | Detail |
 |---|---|---|
@@ -410,6 +410,7 @@ Per CLAUDE.md's Agent/Task/Crew/Flow layering, a single test module often legiti
 | `tests.test_api_incidents::test_get_incident_summary_malformed_id_returns_422` | PASS |  |
 | `tests.test_api_incidents::test_get_incident_summary_returns_real_incident_metadata` | PASS |  |
 | `tests.test_api_incidents::test_get_incident_summary_unknown_incident_returns_404` | PASS |  |
+| `tests.test_api_incidents::test_get_investigation_job_for_a_different_incident_id_returns_404` | PASS |  |
 | `tests.test_api_incidents::test_incident_id_containing_a_path_separator_never_reaches_the_handler[../../etc/passwd]` | PASS |  |
 | `tests.test_api_incidents::test_incident_id_containing_a_path_separator_never_reaches_the_handler[INC/2026/0912]` | PASS |  |
 | `tests.test_api_incidents::test_malformed_incident_id_returns_422[INC 2026 0912]` | PASS |  |
@@ -595,24 +596,24 @@ Per CLAUDE.md's Agent/Task/Crew/Flow layering, a single test module often legiti
 
 Per docs/evaluation.md §5, these supplement (never replace) the structural checks above and require a live `GOOGLE_API_KEY`; they are SKIP, not FAIL, when no key is configured in this environment.
 
-46 total -- 14 passed, 32 failed, 0 skipped
+46 total -- 0 passed, 46 failed, 0 skipped
 
 | Test | Status | Detail |
 |---|---|---|
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_identifies_at_least_one_observed_fact` | PASS |  |
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_identifies_database_pressure_as_abnormal` | PASS |  |
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_never_reports_a_known_unavailable_metric` | PASS |  |
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_observed_facts_match_tool_ground_truth_exactly` | PASS |  |
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_provides_at_least_one_possible_cause` | PASS |  |
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_provides_interpretation_distinct_from_facts` | PASS |  |
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_reports_confidence_in_valid_range` | PASS |  |
-| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_summary_is_non_empty` | PASS |  |
-| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_all_seven_tasks_completed` | PASS |  |
-| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_each_task_produced_the_expected_structured_output_type` | PASS |  |
-| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_final_incident_report_has_remediation_requiring_human_approval` | PASS |  |
-| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_final_incident_report_identifies_the_golden_scenario_incident` | PASS |  |
-| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_final_output_is_the_incident_report` | PASS |  |
-| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_no_tool_failures_across_the_whole_investigation` | PASS |  |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_identifies_at_least_one_observed_fact` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_identifies_database_pressure_as_abnormal` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_never_reports_a_known_unavailable_metric` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_observed_facts_match_tool_ground_truth_exactly` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_provides_at_least_one_possible_cause` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_provides_interpretation_distinct_from_facts` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_reports_confidence_in_valid_range` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloud_infrastructure_analyst_evaluation::test_agent_summary_is_non_empty` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_all_seven_tasks_completed` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_each_task_produced_the_expected_structured_output_type` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_final_incident_report_has_remediation_requiring_human_approval` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_final_incident_report_identifies_the_golden_scenario_incident` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_final_output_is_the_incident_report` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
+| `tests.evaluation.test_cloudops_investigation_crew_evaluation::test_no_tool_failures_across_the_whole_investigation` | **FAIL** | failed on setup with "google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED. {'error': {'code': 42 |
 | `tests.evaluation.test_flow_evaluation::test_flow_produces_a_complete_incident_report` | **FAIL** | assert None is not None |
 | `tests.evaluation.test_flow_evaluation::test_flow_result_requires_human_approval` | **FAIL** | TypeError: 'NoneType' object is not subscriptable |
 | `tests.evaluation.test_flow_evaluation::test_flow_succeeds_end_to_end` | **FAIL** | AssertionError: assert 'failed' == 'succeeded' |
